@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.http.Request;
 import com.github.tomakehurst.wiremock.http.RequestListener;
 import com.github.tomakehurst.wiremock.http.Response;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.apache.http.entity.StringEntity;
+import wiremock.org.apache.http.entity.StringEntity;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import static com.github.tomakehurst.wiremock.http.RequestMethod.GET;
 import static com.github.tomakehurst.wiremock.http.RequestMethod.POST;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.apache.http.entity.ContentType.TEXT_PLAIN;
+import static wiremock.org.apache.http.entity.ContentType.TEXT_PLAIN;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.wiremock.webhooks.Webhooks.webhook;

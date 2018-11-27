@@ -1,8 +1,8 @@
 package org.wiremock.webhooks;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import wiremock.com.fasterxml.jackson.annotation.JsonCreator;
+import wiremock.com.fasterxml.jackson.annotation.JsonIgnore;
+import wiremock.com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.tomakehurst.wiremock.http.Body;
 import com.github.tomakehurst.wiremock.http.HttpHeader;
 import com.github.tomakehurst.wiremock.http.HttpHeaders;
@@ -11,7 +11,7 @@ import com.github.tomakehurst.wiremock.http.RequestMethod;
 import java.net.URI;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static wiremock.com.google.common.collect.Lists.newArrayList;
 
 public class WebhookDefinition {
     

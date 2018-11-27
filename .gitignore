@@ -3,8 +3,9 @@
 *.iws
 *.ipr
 .gradle
-build
-classes
+build/
+classes/
+lib/
 
 tmp*.json
 

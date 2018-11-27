@@ -16,24 +16,22 @@
 package testsupport;
 
 import com.github.tomakehurst.wiremock.http.GenericHttpUriRequest;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.AuthCache;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.*;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.InputStreamEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.BasicAuthCache;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
+import wiremock.org.apache.http.*;
+import wiremock.org.apache.http.auth.AuthScope;
+import wiremock.org.apache.http.auth.UsernamePasswordCredentials;
+import wiremock.org.apache.http.client.AuthCache;
+import wiremock.org.apache.http.client.CredentialsProvider;
+import wiremock.org.apache.http.client.HttpClient;
+import wiremock.org.apache.http.client.methods.*;
+import wiremock.org.apache.http.client.protocol.HttpClientContext;
+import wiremock.org.apache.http.entity.ContentType;
+import wiremock.org.apache.http.entity.InputStreamEntity;
+import wiremock.org.apache.http.entity.StringEntity;
+import wiremock.org.apache.http.impl.auth.BasicScheme;
+import wiremock.org.apache.http.impl.client.BasicAuthCache;
+import wiremock.org.apache.http.impl.client.BasicCredentialsProvider;
+import wiremock.org.apache.http.impl.client.HttpClientBuilder;
+import wiremock.org.apache.http.impl.client.HttpClients;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -41,9 +39,9 @@ import java.net.URI;
 
 import static com.github.tomakehurst.wiremock.common.Exceptions.throwUnchecked;
 import static com.github.tomakehurst.wiremock.http.MimeType.JSON;
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static wiremock.com.google.common.base.Strings.isNullOrEmpty;
 import static java.net.HttpURLConnection.*;
-import static org.apache.http.entity.ContentType.APPLICATION_JSON;
+import static wiremock.org.apache.http.entity.ContentType.APPLICATION_JSON;
 
 public class WireMockTestClient {
 
@@ -143,7 +141,7 @@ public class WireMockTestClient {
     }
 
     private WireMockResponse requestWithBody(
-        HttpEntityEnclosingRequestBase request, String body, String contentType, TestHttpHeader... headers) {
+            HttpEntityEnclosingRequestBase request, String body, String contentType, TestHttpHeader... headers) {
         request.setEntity(new StringEntity(body, ContentType.create(contentType, "utf-8")));
         return executeMethodAndConvertExceptions(request, headers);
     }

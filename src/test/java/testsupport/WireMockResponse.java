@@ -15,16 +15,16 @@
  */
 package testsupport;
 
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.Multimap;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
+import wiremock.com.google.common.collect.ImmutableListMultimap;
+import wiremock.com.google.common.collect.Multimap;
+import wiremock.org.apache.http.Header;
+import wiremock.org.apache.http.HttpResponse;
 
 import java.nio.charset.Charset;
 
 import static com.github.tomakehurst.wiremock.common.HttpClientUtils.getEntityAsByteArrayAndCloseStream;
-import static com.google.common.base.Charsets.UTF_8;
-import static com.google.common.collect.Iterables.getFirst;
+import static wiremock.com.google.common.base.Charsets.UTF_8;
+import static wiremock.com.google.common.collect.Iterables.getFirst;
 
 public class WireMockResponse {
 	
