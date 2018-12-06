@@ -1,11 +1,16 @@
 package org.wiremock.webhooks;
 
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.common.FileSource;
 import com.github.tomakehurst.wiremock.common.Notifier;
 import com.github.tomakehurst.wiremock.core.Admin;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.PostServeAction;
+import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;
 import com.github.tomakehurst.wiremock.http.HttpClientFactory;
 import com.github.tomakehurst.wiremock.http.HttpHeader;
+import com.github.tomakehurst.wiremock.http.Request;
+import com.github.tomakehurst.wiremock.http.ResponseDefinition;
 import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
 import wiremock.org.apache.http.HttpResponse;
 import wiremock.org.apache.http.client.HttpClient;
@@ -39,7 +44,7 @@ public class Webhooks extends PostServeAction {
     }
 
     @Override
-    public void doAction(ServeEvent serveEvent, Admin admin, Parameters parameters) {
+    public void doAction(final ServeEvent serveEvent, final Admin admin, final Parameters parameters) {
         final WebhookDefinition definition = parameters.as(WebhookDefinition.class);
         final Notifier notifier = notifier();
 
@@ -47,7 +52,13 @@ public class Webhooks extends PostServeAction {
             new Runnable() {
                 @Override
                 public void run() {
-                    HttpUriRequest request = buildRequest(definition);
+                    HttpUriRequest request = buildRequest(
+                            definition,
+                            serveEvent.getRequest(),
+                            serveEvent.getResponseDefinition(),
+                            admin.getOptions().filesRoot(),
+                            parameters
+                    );
 
                     try {
                         HttpResponse response = httpClient.execute(request);
@@ -69,22 +80,35 @@ public class Webhooks extends PostServeAction {
         );
     }
 
-    private static HttpUriRequest buildRequest(WebhookDefinition definition) {
-        HttpUriRequest request = getHttpRequestFor(
+    private static HttpUriRequest buildRequest(
+            WebhookDefinition definition,
+            Request request,
+            ResponseDefinition responseDefinition,
+            FileSource fs,
+            Parameters parameters
+    ) {
+        HttpUriRequest httpRequest = getHttpRequestFor(
                 definition.getMethod(),
                 definition.getUrl().toString()
         );
 
         for (HttpHeader header: definition.getHeaders().all()) {
-            request.addHeader(header.key(), header.firstValue());
+            httpRequest.addHeader(header.key(), header.firstValue());
         }
 
         if (definition.getMethod().hasEntity()) {
-            HttpEntityEnclosingRequestBase entityRequest = (HttpEntityEnclosingRequestBase) request;
-            entityRequest.setEntity(new ByteArrayEntity(definition.getBinaryBody()));
+            HttpEntityEnclosingRequestBase entityRequest = (HttpEntityEnclosingRequestBase) httpRequest;
+            ResponseDefinition respDef = ResponseDefinitionBuilder.like(responseDefinition)
+                    .withBody(definition.getBody())
+                    .build();
+
+            byte[] body = new ResponseTemplateTransformer(false)
+                    .transform(request, respDef, fs, parameters)
+                    .getByteBody();
+            entityRequest.setEntity(new ByteArrayEntity(body));
         }
 
-        return request;
+        return httpRequest;
     }
 
     public static WebhookDefinition webhook() {

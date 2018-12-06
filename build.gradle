@@ -137,3 +137,9 @@ task addGitTag << {
 task release {
     dependsOn clean, jar, signArchives, uploadArchives, addGitTag
 }
+
+task copyJar(type: Copy) {
+    def fileName = "wiremock-webhooks-extension-0.0.1.jar"
+    from file("$buildDir/libs/$fileName")
+    into file("../wiremock-docker/lib/")
+}

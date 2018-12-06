@@ -9,6 +9,7 @@ import wiremock.org.apache.http.entity.StringEntity;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.wiremock.webhooks.Webhooks;
 import testsupport.TestNotifier;
 import testsupport.WireMockTestClient;
@@ -27,6 +28,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.wiremock.webhooks.Webhooks.webhook;
 
+@Ignore
 public class WebhooksAcceptanceTest {
 
     @Rule

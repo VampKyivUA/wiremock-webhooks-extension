@@ -9,7 +9,9 @@ import com.github.tomakehurst.wiremock.http.HttpHeaders;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static wiremock.com.google.common.collect.Lists.newArrayList;
 
@@ -19,17 +21,22 @@ public class WebhookDefinition {
     private URI url;
     private List<HttpHeader> headers;
     private Body body = Body.none();
+    private List<String> transformers = Collections.emptyList();
 
     @JsonCreator
     public WebhookDefinition(@JsonProperty("method") RequestMethod method,
                              @JsonProperty("url") URI url,
                              @JsonProperty("headers") HttpHeaders headers,
                              @JsonProperty("body") String body,
-                             @JsonProperty("base64Body") String base64Body) {
+                             @JsonProperty("base64Body") String base64Body,
+                             @JsonProperty("transformers") List<String> transformers
+
+    ) {
         this.method = method;
         this.url = url;
         this.headers = newArrayList(headers.all());
         this.body = Body.fromOneOf(null, body, null, base64Body);
+        this.transformers = transformers;
     }
 
     public WebhookDefinition() {
@@ -53,6 +60,10 @@ public class WebhookDefinition {
 
     public String getBody() {
         return body.isBinary() ? null : body.asString();
+    }
+
+    public Body getBodyRaw() {
+        return body;
     }
 
     @JsonIgnore
@@ -96,6 +107,11 @@ public class WebhookDefinition {
 
     public WebhookDefinition withBinaryBody(byte[] body) {
         this.body = new Body(body);
+        return this;
+    }
+
+    public WebhookDefinition withTransformers(List<String> transformers) {
+        this.transformers = Objects.requireNonNull(transformers);
         return this;
     }
 }
